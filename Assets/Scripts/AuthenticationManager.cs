@@ -18,7 +18,6 @@ public class AuthenticationManager : MonoBehaviour
     public TMP_InputField LoginEmail;
     public TMP_InputField LoginPassword;
     public TMP_Text warningLoginText;
-    public TMP_Text confirmLoginText;
 
     // Register variables
     [Header("Register")]
@@ -39,14 +38,13 @@ public class AuthenticationManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                warningLoginText.text = "SERVER DOWN! ERROR: " + dependencyStatus;
             }
         });
     }
 
     private void InitializeFirebase()
     {
-        Debug.Log("Setting up Firebase Auth");
         auth = FirebaseAuth.DefaultInstance;
     }
 
@@ -64,8 +62,8 @@ public class AuthenticationManager : MonoBehaviour
         yield return new WaitUntil(() => loginTask.IsCompleted);
 
         if (loginTask.Exception != null)
-        {
-            Debug.LogWarning($"Login failed: {loginTask.Exception}");
+        {   
+            warningLoginText.text = "LOGIN FAILED: " + loginTask.Exception;
             FirebaseException firebaseEx = loginTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
@@ -84,10 +82,8 @@ public class AuthenticationManager : MonoBehaviour
         else
         {
             User = loginTask.Result.User;
-            Debug.Log($"User signed in: {User.DisplayName} ({User.Email})");
             warningLoginText.text = "";
-            confirmLoginText.text = "LOGGED IN!";
-            SceneManager.LoadScene(2); // Adjust to your home/dashboard scene
+            SceneManager.LoadScene(2); 
         }
     }
 
@@ -114,8 +110,8 @@ public class AuthenticationManager : MonoBehaviour
         yield return new WaitUntil(() => registerTask.IsCompleted);
 
         if (registerTask.Exception != null)
-        {
-            Debug.LogWarning($"Register failed: {registerTask.Exception}");
+        {   
+            warningRegisterText.text = "REGISTER FAILED: " + registerTask.Exception;
             FirebaseException firebaseEx = registerTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
@@ -141,13 +137,11 @@ public class AuthenticationManager : MonoBehaviour
 
                 if (profileTask.Exception != null)
                 {
-                    Debug.LogWarning($"Failed to set username: {profileTask.Exception}");
                     warningRegisterText.text = "Username Set Failed!";
                 }
                 else
                 {
-                    warningRegisterText.text = "";
-                    SceneManager.LoadScene(0); // Back to Login
+                    SceneManager.LoadScene(0); 
                 }
             }
         }
