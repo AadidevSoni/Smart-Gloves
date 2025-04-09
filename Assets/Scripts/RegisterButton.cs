@@ -52,6 +52,40 @@ public class RegisterButton : MonoBehaviour
             return;
         }
 
+        RestClient.Get<User>("https://smart-gloves-app-6b71b-default-rtdb.asia-southeast1.firebasedatabase.app/Users/" + userName + ".json").Then(response
+        => 
+        {
+            if (response == null)
+            {  
+                    
+            }
+            else
+            {
+                _ErrorMessage.text = "USERNAME ALREADY TAKEN! TRY ANOTHER!";
+                return;
+            }
+        }).Catch(error =>
+        {
+            _ErrorMessage.text = "USERNAME ALREADY TAKEN! TRY ANOTHER!";
+        });
+
+        RestClient.Get<User>("https://smart-gloves-app-6b71b-default-rtdb.asia-southeast1.firebasedatabase.app/Users/" + emailAddress + ".json").Then(response
+        => 
+        {
+            if (response == null)
+            {  
+                     
+            }
+            else
+            {
+                _ErrorMessage.text = "EMAIL ADDRESS ALREADY IN USE! TRY LOGIN!";
+                return;
+            }
+        }).Catch(error =>
+        {
+            _ErrorMessage.text = "EMAIL ADDRESS ALREADY IN USE! TRY LOGIN!";
+        });
+
         userName = _userName.text;
         emailAddress = _emailAddress.text;
         password = _password.text;
