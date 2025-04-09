@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class AuthenticationManager : MonoBehaviour
 {
+    private bool firebaseReady = false;
+
     // Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
@@ -46,11 +48,24 @@ public class AuthenticationManager : MonoBehaviour
     private void InitializeFirebase()
     {
         auth = FirebaseAuth.DefaultInstance;
+        firebaseReady = true;
     }
 
     // Button listeners
-    public void LoginButton() => StartCoroutine(Login(LoginEmail.text, LoginPassword.text));
-    public void RegisterButton() => StartCoroutine(Register(RegisterEmail.text, RegisterPassword.text, RegisterUserName.text));
+    public void LoginButton(){
+        if(!firebaseReady){
+            warningLoginText.text = "PLEASE WAIT... CONNECTING TO SERVERS!";
+            return;
+        }
+        StartCoroutine(Login(LoginEmail.text, LoginPassword.text));
+    }
+    public void RegisterButton(){
+        if(!firebaseReady){
+            warningRegisterText.text = "PLEASE WAIT... CONNECTING TO SERVERS!";
+            return;
+        }
+        StartCoroutine(Register(RegisterEmail.text, RegisterPassword.text, RegisterUserName.text));
+    }
 
     public void GoToRegisterScene() => SceneManager.LoadScene(1); // Adjust index as needed
     public void GoToLoginScene() => SceneManager.LoadScene(0);    // Adjust index as needed
