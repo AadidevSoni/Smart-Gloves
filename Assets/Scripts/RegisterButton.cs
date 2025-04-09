@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Proyecto26;
-using UnityEngine.SceneManagement;
 
 public class RegisterButton : MonoBehaviour
 {
