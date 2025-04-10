@@ -55,7 +55,7 @@ public class RegisterButton : MonoBehaviour
         RestClient.Get<User>("https://smart-gloves-app-6b71b-default-rtdb.asia-southeast1.firebasedatabase.app/Users/" + userName + ".json").Then(response
         => 
         {
-            if (response == null)
+            if (response != null)
             {  
                     
             }
@@ -72,7 +72,7 @@ public class RegisterButton : MonoBehaviour
         RestClient.Get<User>("https://smart-gloves-app-6b71b-default-rtdb.asia-southeast1.firebasedatabase.app/Users/" + emailAddress + ".json").Then(response
         => 
         {
-            if (response == null)
+            if (response != null)
             {  
                      
             }
@@ -90,6 +90,7 @@ public class RegisterButton : MonoBehaviour
         emailAddress = _emailAddress.text;
         password = _password.text;
         userType = _userType.options[_userType.value].text;
+
         PostToDatabase();
     }
 
@@ -97,6 +98,6 @@ public class RegisterButton : MonoBehaviour
     {
         User user = new User();
         RestClient.Put("https://smart-gloves-app-6b71b-default-rtdb.asia-southeast1.firebasedatabase.app/Users/" + userName + ".json", user);
-        Debug.Log("Registered");
+        _ErrorMessage.text = "REGISTERED! GO BACK TO LOGIN WINDOW!";
     }
 }
